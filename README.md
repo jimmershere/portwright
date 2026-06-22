@@ -19,25 +19,29 @@ tools/security-check.py # stdlib static security scan
 push / PR to main
    ├─ validate   (htmlhint — syntactically correct?)
    └─ security   (tools/security-check.py — secrets / mixed-content / js: URIs)
-        │  both must pass
-        ▼
-   deploy  →  PAUSES at the `production` approval gate
-        │     (you click "Approve and deploy" in the Actions tab)
-        ▼
-   rsync public/ → portwright.io droplet over SSH
+                  ... continuous feedback; these NEVER deploy.
+
+YOU click "Run workflow" (Actions → Publish portwright.io)   ← the gate
+   ├─ validate   (re-run)
+   ├─ security   (re-run)
+   └─ deploy     rsync public/ → portwright.io droplet over SSH
 ```
 
-- **You are the gate.** The `production` environment requires your approval, so
-  nothing publishes until you review and click approve. A change is "approved"
-  only once it is syntactically correct (validate), clean (security), **and** you
-  say so.
-- PR runs execute validate + security only — they never deploy.
+- **You are the gate.** Deploy runs *only* on a manual trigger, so nothing
+  publishes until you choose to. Because deploy depends on validate + security,
+  a manual run still re-checks first — a change ships only when it is
+  syntactically correct, clean, **and** you said go.
+- Push/PR runs execute validate + security only — they never deploy.
 - Deploy **skips gracefully** until the secrets below exist, so the pipeline is
   green from day one.
 
-## One-time setup — `production` environment secrets
+> Note: this manual gate is used because the repo is **private on the free
+> plan**, where GitHub's "Approve and deploy" *environment* gate isn't
+> available. On GitHub Pro this can be upgraded to that click-to-approve pause.
 
-Settings → Environments → **production** → Secrets:
+## One-time setup — repository secrets
+
+Settings → Secrets and variables → Actions → **New repository secret**:
 
 | Secret | Required | Meaning |
 |---|---|---|
@@ -46,8 +50,6 @@ Settings → Environments → **production** → Secrets:
 | `PORTWRIGHT_USER` | no | SSH user (default `root`) |
 | `PORTWRIGHT_PATH` | no | Web root (default `/var/www/portwright.io`) |
 | `PORTWRIGHT_KNOWN_HOSTS` | recommended | Pinned `known_hosts`; else `ssh-keyscan` (TOFU) |
-
-The required reviewer on `production` is configured separately (repo owner).
 
 ## Local checks
 

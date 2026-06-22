@@ -1,9 +1,10 @@
 name: Publish portwright.io
 
-# Pipeline: validate the HTML, security-scan it, then deploy — but only after a
-# human approves the `production` environment. Deploy is gated and also requires
-# both checks to pass first, so nothing ships unless it is syntactically correct
-# and clean. Credentials live only in environment secrets (see README.md).
+# Pipeline: validate the HTML and security-scan it on every push/PR. Deploy is
+# the human gate — it runs ONLY when you manually trigger this workflow ("Run
+# workflow"), and even then it re-runs validate + security first, so nothing
+# ships unless it is syntactically correct, clean, AND you said go.
+# Credentials live only in repository secrets (see README.md).
 
 on:
   push:
@@ -45,10 +46,10 @@ jobs:
   deploy:
     name: Deploy to portwright.io
     needs: [validate, security]
-    # Only publish from main (merges / dispatch), never from PR validation runs.
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    # The gate: deploy only on a manual run, and only from main. validate +
+    # security above are prerequisites, so a manual deploy still re-checks first.
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    environment: production
     steps:
       - uses: actions/checkout@v4
 
