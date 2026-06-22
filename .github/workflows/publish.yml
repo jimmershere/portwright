@@ -1,0 +1,106 @@
+name: Publish portwright.io
+
+# Pipeline: validate the HTML, security-scan it, then deploy — but only after a
+# human approves the `production` environment. Deploy is gated and also requires
+# both checks to pass first, so nothing ships unless it is syntactically correct
+# and clean. Credentials live only in environment secrets (see README.md).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-portwright-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate HTML
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: htmlhint
+        run: npx --yes htmlhint@^1 --config .htmlhintrc "public/**/*.html"
+
+  security:
+    name: Security scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Static security scan
+        run: python3 tools/security-check.py
+
+  deploy:
+    name: Deploy to portwright.io
+    needs: [validate, security]
+    # Only publish from main (merges / dispatch), never from PR validation runs.
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check deploy secrets are configured
+        id: guard
+        env:
+          HOST: ${{ secrets.PORTWRIGHT_HOST }}
+          KEY: ${{ secrets.PORTWRIGHT_SSH_KEY }}
+        run: |
+          if [ -n "$HOST" ] && [ -n "$KEY" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::PORTWRIGHT_HOST / PORTWRIGHT_SSH_KEY not set; skipping publish. Add them under Settings -> Environments -> production."
+          fi
+
+      - name: Configure SSH
+        if: steps.guard.outputs.ready == 'true'
+        env:
+          KEY: ${{ secrets.PORTWRIGHT_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.PORTWRIGHT_KNOWN_HOSTS }}
+          HOST: ${{ secrets.PORTWRIGHT_HOST }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          if [ -n "$KNOWN_HOSTS" ]; then
+            printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          else
+            ssh-keyscan -H "$HOST" >> ~/.ssh/known_hosts 2>/dev/null || true
+          fi
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Publish via rsync over SSH
+        if: steps.guard.outputs.ready == 'true'
+        env:
+          HOST: ${{ secrets.PORTWRIGHT_HOST }}
+          DEPLOY_USER: ${{ secrets.PORTWRIGHT_USER }}
+          REMOTE_PATH: ${{ secrets.PORTWRIGHT_PATH }}
+        run: |
+          DEPLOY_USER="${DEPLOY_USER:-root}"
+          REMOTE_PATH="${REMOTE_PATH:-/var/www/portwright.io}"
+          rsync -avz \
+            -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes" \
+            public/ "${DEPLOY_USER}@${HOST}:${REMOTE_PATH}/"
+          echo "Published public/ to ${HOST}:${REMOTE_PATH}"
+
+      - name: Summary
+        if: always()
+        run: |
+          if [ "${{ steps.guard.outputs.ready }}" = "true" ]; then
+            echo "Deployed. Page: https://portwright.io/ai-it-alerts.html"
+          else
+            echo "Deploy skipped: configure production secrets to enable publishing."
+          fi
