@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" fill="none" stroke="#8FB0B8" stroke-opacity="0.07" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<g transform="translate(30,34)">
+<circle cx="12" cy="5" r="2.2"/><line x1="12" y1="7" x2="12" y2="22"/><line x1="8" y1="10" x2="16" y2="10"/><path d="M4 14c0 5 4 7.5 8 7.8c4-0.3 8-2.8 8-7.8"/>
+</g>
+<g transform="translate(152,52)">
+<circle cx="24" cy="24" r="20"/><circle cx="24" cy="24" r="6"/><line x1="4" y1="24" x2="44" y2="24"/><line x1="24" y1="4" x2="24" y2="44"/><line x1="10" y1="10" x2="38" y2="38"/><line x1="38" y1="10" x2="10" y2="38"/>
+</g>
+<g transform="translate(44,150)">
+<circle cx="24" cy="24" r="22"/><polygon points="24,6 30,24 24,42 18,24"/><polygon points="6,24 24,18 42,24 24,30"/>
+</g>
+<g transform="translate(150,172)">
+<path d="M0 18 q10 -10 20 0 t20 0 t20 0"/><path d="M0 30 q10 -10 20 0 t20 0 t20 0"/>
+</g>
+</svg>

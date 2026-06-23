@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Local81 Recipes — common IT jobs, union-made | Portwright</title>
+<meta name="description" content="Ready-to-run Local81 recipes for the jobs everyone actually has: back up your files to Google Drive, Dropbox or S3; triage and brief your inbox; sweep your machine for OS, security and virus problems. Operator-readable, dry-run-first, audited.">
+<meta property="og:title" content="Local81 Recipes — common IT jobs, union-made">
+<meta property="og:description" content="Back up to the cloud, triage your inbox, sweep for security and viruses — each one a readable Local81 template you can run and prove.">
+<meta property="og:type" content="website">
+<style>
+  /* Portwright — operator-lab design system (inlined, self-contained) */
+  :root{
+    --ink:#0B1018; --ink2:#0E1620; --panel:#121C2A; --panel2:#16212F;
+    --navy:#1C2C49; --steel:#6E7A86; --line:#22324C; --line2:#2E4150;
+    --orange:#EF6A28; --orange-d:#C24A12; --lime:#A6E84A; --lime-d:#7FBE2E;
+    --cream:#ECE4D2; --text:#E7EBEF; --muted:#93A6BC; --muted2:#6E8094;
+    --radius:14px; --radius-lg:20px; --maxw:1140px;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:var(--sans); color:var(--text); line-height:1.65;
+    background:
+      radial-gradient(900px 500px at 12% -5%, rgba(124,230,90,.10), transparent 60%),
+      radial-gradient(800px 600px at 100% 0%, rgba(239,106,40,.08), transparent 55%),
+      var(--ink);
+    background-attachment:fixed;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  img,svg{display:block;max-width:100%}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .mono{font-family:var(--mono)}
+  .kicker{font-family:var(--mono);font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--lime);display:inline-flex;align-items:center}
+  h1,h2,h3{line-height:1.12;font-weight:700;color:#fff;letter-spacing:-.5px}
+  h1{font-size:clamp(38px,6vw,68px)}
+  h2{font-size:clamp(28px,4vw,40px)}
+  h3{font-size:20px}
+  p{color:var(--muted)}
+  .lead{font-size:clamp(17px,2.2vw,21px);color:#C7D2DE;max-width:60ch}
+
+  /* nav */
+  .nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);
+    background:rgba(11,16,24,.72);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .brand{display:flex;align-items:center;gap:12px;font-weight:700;color:#fff;letter-spacing:.3px}
+  .brand .tile{width:34px;height:34px;border-radius:9px;background:var(--navy);border:1px solid var(--line2);
+    display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:700}
+  .brand .tile .gt{color:var(--lime);margin-right:1px}
+  .brand .tile .p{color:var(--cream)}
+  .brand .w{color:var(--orange)}
+  .navlinks{display:flex;align-items:center;gap:28px}
+  .navlinks a{color:var(--muted);font-size:15px}
+  .navlinks a:hover{color:#fff}
+  .btn{display:inline-flex;align-items:center;gap:8px;border-radius:10px;font-weight:600;font-size:15px;
+    padding:11px 18px;border:1px solid transparent;cursor:pointer;transition:.15s}
+  .btn-primary{background:var(--orange);color:#1a0c03}
+  .btn-primary:hover{background:#ff7d3d}
+  .btn-ghost{border-color:var(--line2);color:var(--cream)}
+  .btn-ghost:hover{border-color:var(--lime);color:#fff}
+  .btn-lime{background:var(--lime);color:#10210a}
+  .btn-lime:hover{background:#b6f55c}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap}
+
+  /* sections */
+  section{padding:64px 0;border-top:1px solid var(--line)}
+  .sec-head{max-width:62ch;margin-bottom:36px}
+  .sec-head h2{margin:10px 0 12px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .card{background:linear-gradient(180deg,var(--panel),var(--ink2));border:1px solid var(--line);
+    border-radius:var(--radius);padding:26px;transition:.15s}
+  .card:hover{border-color:var(--line2);transform:translateY(-2px)}
+  .card .ic{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:22px;margin-bottom:16px;
+    background:rgba(166,232,74,.10);color:var(--lime);border:1px solid rgba(166,232,74,.25)}
+  .card.orange .ic{background:rgba(239,106,40,.12);color:var(--orange);border-color:rgba(239,106,40,.3)}
+  .card h3{color:#fff;margin-bottom:8px}
+  .card p{font-size:15px}
+  .tag{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:1px;color:var(--cream);
+    background:var(--navy);border:1px solid var(--line2);border-radius:6px;padding:3px 9px;margin:4px 6px 0 0}
+
+  /* band */
+  .band{background:linear-gradient(180deg,#10202b,#0b141a);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .band .wrap{display:grid;grid-template-columns:1fr auto;gap:30px;align-items:center;padding:54px 24px}
+  .band h2{max-width:20ch}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:46px 0 60px;color:var(--muted2)}
+  footer .cols{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}
+  footer a{color:var(--muted)}footer a:hover{color:#fff}
+  footer .fcol h4{color:var(--cream);font-size:13px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;font-family:var(--mono)}
+  footer .fcol a{display:block;font-size:14px;margin-bottom:8px}
+  .fineprint{margin-top:30px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--muted2);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .vet{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--lime);
+    border:1px solid rgba(166,232,74,.3);border-radius:999px;padding:5px 12px}
+
+  /* page hero */
+  .phead{padding:64px 0 8px}
+  .phead .kicker{margin-bottom:14px}
+  .phead p{margin-top:14px}
+  pre.code{background:#080d12;border:1px solid var(--line);border-radius:12px;padding:18px 20px;overflow:auto;
+    font-family:var(--mono);font-size:13.5px;color:#cfe0d2;line-height:1.75;margin:6px 0}
+  pre.code .c{color:var(--muted2)}
+  pre.code .g{color:var(--lime)}
+  .badge{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--line);
+    border-radius:999px;padding:6px 12px;background:rgba(255,255,255,.02)}
+  .badge b{color:var(--lime);font-weight:600}
+  .seabee{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--cream);
+    border:1px solid var(--line2);border-radius:999px;padding:5px 12px;background:rgba(28,44,73,.45)}
+  .opsrow{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:30px}
+  .opstep{display:grid;grid-template-columns:28px 1fr;gap:14px;align-items:start}
+  .opstep .oi{font-size:22px;line-height:1;margin-top:2px}
+  .opstep h3{color:#fff;font-size:16px;margin-bottom:4px}
+  .opstep p{font-size:14.5px}
+  .candi{font-family:var(--mono);letter-spacing:2px;color:var(--lime);font-weight:600}
+
+  /* recipes page — panel cards with a clipped command preview */
+  .recipegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:8px}
+  .recipe{display:flex;flex-direction:column}
+  .recipe pre.code{font-size:12.5px;line-height:1.7;flex:1}
+  .recipe .rtags{margin-top:14px}
+  .recipe .does{font-size:15px;color:var(--muted);margin:2px 0 14px}
+  .recipe .honest{font-size:12.5px;color:var(--muted2);font-family:var(--mono);
+    border-left:2px solid var(--line2);padding:6px 0 6px 12px;margin-top:14px}
+  .recipe .honest b{color:var(--cream)}
+  .jobline{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 2px}
+
+  @media(max-width:860px){
+    .grid3,.band .wrap,.opsrow,.recipegrid{grid-template-columns:1fr}
+    .navlinks{display:none}
+    .band .wrap{padding:40px 24px}
+  }
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html"><span class="tile"><span class="gt">&gt;</span><span class="p">P</span></span><span>Port<span class="w">wright</span></span></a>
+    <nav class="navlinks">
+      <a href="capabilities.html">Capabilities</a>
+      <a href="open-source.html">Open source</a>
+      <a href="local81.html">Local81</a>
+      <a href="recipes.html">Recipes</a>
+      <a href="about.html">About</a>
+      <a class="btn btn-ghost" href="about.html#contact">Get in touch</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="phead" style="border-top:0">
+  <div class="wrap">
+    <div class="kicker">Local81 · runbooks for the rest of us</div>
+    <h1>Recipes.</h1>
+    <p class="lead">The same operator-grade control plane that pushes to a ten-host fleet works just as well on the chores <b>everyone</b> has — backing up your files, taming your inbox, keeping your machine clean. Every recipe below is a <b>readable template</b>: dry-run-first, journaled, and audited. <b>No agent on anything. No black boxes.</b></p>
+    <div class="jobline">
+      <span class="seabee">Copy a config · run a plan · prove the run</span>
+      <span class="badge"><b>dry-run</b> before anything changes</span>
+      <span class="badge"><b>secrets</b> never written to disk</span>
+    </div>
+    <div class="cta-row" style="margin-top:20px">
+      <a class="btn btn-lime" href="#recipes">Browse the recipes →</a>
+      <a class="btn btn-ghost" href="local81.html">← Back to Local81</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== THE RECIPES ===================== -->
+<section id="recipes" style="border-top:0;padding-top:8px">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">The pantry</div>
+      <h2>Pick a job. Run the line.</h2>
+      <p class="lead">Each card is a real, self-contained Local81 template you can drop in and run today. The full files live in the open-source repo under <span class="mono">examples/recipes/personal/</span>.</p>
+    </div>
+
+    <div class="recipegrid">
+
+      <!-- 1. CLOUD BACKUP -->
+      <div class="card recipe">
+        <div class="ic">&#9729;</div>
+        <h3>Back up my files to the cloud</h3>
+        <p class="does">Push Documents, Photos &amp; Desktop to <b>Google&nbsp;Drive, Dropbox, or S3</b> on a 3-2-1 plan — resumable, never destructive, fully previewed first.</p>
+        <pre class="code"><span class="c"># preview exactly what would move — change nothing</span>
+local81 --profile cloud-backup plan --summary
+local81 --profile cloud-backup deploy --latest --dry-run
+
+<span class="c"># back it up, then fan out to your cloud remote</span>
+CLOUD_REMOTE=gdrive \
+  local81 --profile cloud-backup deploy --latest --<span class="g">execute</span>
+
+local81 --profile cloud-backup history   <span class="c"># every run, on disk</span></pre>
+        <div class="rtags"><span class="tag">rsync over ssh</span><span class="tag">rclone fan-out</span><span class="tag">3-2-1</span></div>
+        <div class="honest"><b>Honest by design:</b> rclone owns your cloud tokens on the vault host — referenced by name, never written into the config.</div>
+      </div>
+
+      <!-- 2. SYSTEM & SECURITY SWEEP -->
+      <div class="card orange recipe">
+        <div class="ic">&#128737;</div>
+        <h3>Check my machine for OS, security &amp; virus problems</h3>
+        <p class="does">A read-only morning sweep: pending updates, a CIS-style hardening score, a rootkit check, and a <b>ClamAV virus scan</b> — captured to plain text and a tamper-evident receipt.</p>
+        <pre class="code"><span class="c"># readiness + security posture (read-only)</span>
+local81 doctor --fleet
+local81 <span class="g">compliance</span> report --scope all   <span class="c"># AC·CM·IA·SC·AU</span>
+sudo lynis audit system --quick
+
+<span class="c"># virus scan — report only, never auto-delete</span>
+sudo freshclam &amp;&amp; clamscan -r -i ~/ /tmp /srv
+local81 <span class="g">audit</span> emit --to "$COLLECTOR"  <span class="c"># signed receipt</span></pre>
+        <div class="rtags"><span class="tag">compliance</span><span class="tag">clamav</span><span class="tag">lynis · rkhunter</span></div>
+        <div class="honest"><b>Honest by design:</b> Local81 orchestrates the real OS tools and labels which steps are read-only vs. which would change the box.</div>
+      </div>
+
+      <!-- 3. INBOX TRIAGE -->
+      <div class="card recipe">
+        <div class="ic">&#9993;</div>
+        <h3>Flag my important email &amp; brief me daily</h3>
+        <p class="does">Each morning: label what matters, move <b>Urgent</b> mail out of the firehose, archive the noise, and draft a <b>one-page digest</b> of the few things that actually need you.</p>
+        <pre class="code"><span class="c"># preview the moves — labels nothing yet</span>
+DRY_RUN=1 local81 --profile inbox-triage \
+  deploy --latest --execute
+
+<span class="c"># go live weekday mornings (cron or n8n schedule)</span>
+0 7 * * 1-5  local81 --profile inbox-triage \
+  deploy --latest --<span class="g">execute</span>
+<span class="c"># -&gt; labels Important/Urgent/FYI, drafts the daily brief</span></pre>
+        <div class="rtags"><span class="tag">gmail api</span><span class="tag">rules + LLM</span><span class="tag">daily digest</span></div>
+        <div class="honest"><b>Honest by design:</b> your OAuth token stays in your keychain; every relabel/move is journaled so you can see what moved and why.</div>
+      </div>
+
+      <!-- 4. PUBLISH A SITE -->
+      <div class="card recipe">
+        <div class="ic">&#127760;</div>
+        <h3>Publish my website or blog</h3>
+        <p class="does">Push a built static site to your host over SSH+rsync. Re-publish is a <b>no-op when nothing changed</b>; drift is detected and only the moved files ship.</p>
+        <pre class="code"><span class="c"># build, then preview the upload</span>
+local81 --profile site plan --summary
+local81 --profile site deploy --latest --check  <span class="c"># drift?</span>
+
+<span class="c"># ship only what changed, content-addressed by sha256</span>
+local81 --profile site deploy --latest --<span class="g">execute</span></pre>
+        <div class="rtags"><span class="tag">static site</span><span class="tag">desired-state</span><span class="tag">no-op safe</span></div>
+      </div>
+
+      <!-- 5. SCHEDULED DB BACKUP -->
+      <div class="card recipe">
+        <div class="ic">&#128190;</div>
+        <h3>Back up my database, on schedule</h3>
+        <p class="does">Safe, planned backups for <b>PostgreSQL, Oracle, or SQLite</b> — readiness-checked first, with the dump shipped offsite by the same backup recipe above.</p>
+        <pre class="code"><span class="c"># prove the DB is reachable &amp; healthy</span>
+local81 db doctor
+
+<span class="c"># plan a backup (dump tool chosen per engine), then run it</span>
+local81 db backup --plan
+local81 db backup --<span class="g">execute</span>   <span class="c"># pg_basebackup / expdp / .backup</span></pre>
+        <div class="rtags"><span class="tag">postgres 17</span><span class="tag">oracle 19c</span><span class="tag">sqlite</span></div>
+      </div>
+
+      <!-- 6. RESTORE DRILL -->
+      <div class="card orange recipe">
+        <div class="ic">&#8635;</div>
+        <h3>Prove my backups actually restore</h3>
+        <p class="does">A backup you have never restored is a rumor. This recipe pulls the latest copy to a scratch host, restores it, and runs a health probe — then files the proof.</p>
+        <pre class="code"><span class="c"># pull latest backup to a throwaway target &amp; restore</span>
+local81 --profile restore-drill deploy --latest --<span class="g">execute</span>
+
+<span class="c"># verify it came back, then prove you tested it</span>
+local81 --profile restore-drill status
+local81 <span class="g">audit</span> verify   <span class="c"># the drill is in the ledger</span></pre>
+        <div class="rtags"><span class="tag">3-2-1</span><span class="tag">health probe</span><span class="tag">audited</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HOW A RECIPE WORKS ===================== -->
+<section>
+  <div class="wrap">
+    <div class="sec-head"><div class="kicker">Anatomy of a recipe</div><h2>One readable file. Four honest steps.</h2></div>
+    <div class="opsrow">
+      <div class="opstep">
+        <span class="oi">&#127796;</span>
+        <div><h3>1 · Configure</h3><p>Edit one operator-readable <span class="mono">config.ini</span> or runbook — your paths, your targets. No DSL, no daemon.</p></div>
+      </div>
+      <div class="opstep">
+        <span class="oi">&#128221;</span>
+        <div><h3>2 · Plan &amp; dry-run</h3><p><span class="mono">plan</span> then <span class="mono">deploy --dry-run</span> show every step before a single byte moves.</p></div>
+      </div>
+      <div class="opstep">
+        <span class="oi">&#128296;</span>
+        <div><h3>3 · Execute</h3><p><span class="mono">--execute</span> runs the line, backing up anything it would overwrite and journaling the result.</p></div>
+      </div>
+      <div class="opstep">
+        <span class="oi">&#9875;</span>
+        <div><h3>4 · Prove it</h3><p><span class="mono">audit verify</span> recomputes the hash-chained ledger; <span class="mono">emit</span> files a signed receipt.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CTA BAND ===================== -->
+<section style="border-top:0;padding-top:0">
+  <div class="band">
+    <div class="wrap">
+      <div>
+        <span class="vet">★ Veteran-built</span>
+        <h2 style="margin:14px 0 8px">Your chores, <span style="color:var(--lime)">union-made.</span></h2>
+        <p class="lead">Grab the templates from the open-source repo, or tell us the job and we will write the recipe. <span class="candi">Construimus, Batuimus.</span></p>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-lime" href="https://github.com/portwright/local81">Get the recipes →</a>
+        <a class="btn btn-primary" href="about.html#contact">Request a recipe →</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div class="fcol" style="max-width:300px">
+        <a class="brand" href="index.html"><span class="tile"><span class="gt">&gt;</span><span class="p">P</span></span><span>Port<span class="w">wright</span></span></a>
+        <p style="margin-top:14px;font-size:14px">Operator-grade software, AI, and secure systems. Veteran-built.</p>
+      </div>
+      <div class="fcol"><h4>Company</h4><a href="capabilities.html">Capabilities</a><a href="open-source.html">Open source</a><a href="local81.html">Local81</a><a href="recipes.html">Recipes</a><a href="about.html">About</a></div>
+      <div class="fcol"><h4>Connect</h4><a href="mailto:hello@portwright.io">hello@portwright.io</a><a href="https://github.com/portwright">GitHub</a></div>
+    </div>
+    <div class="fineprint"><span>© 2026 Portwright. Built in port. Proven at sea.</span><span class="mono">portwright.io</span></div>
+  </div>
+</footer>
+</body>
+</html>
