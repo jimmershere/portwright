@@ -48,7 +48,7 @@ Settings → Secrets and variables → Actions → **New repository secret**:
 | `PORTWRIGHT_HOST` | yes | Droplet hostname or IP |
 | `PORTWRIGHT_SSH_KEY` | yes | **Private** SSH key for the droplet (PEM) |
 | `PORTWRIGHT_USER` | no | SSH user (default `root`) |
-| `PORTWRIGHT_PATH` | no | Web root (default `/var/www/portwright.io`) |
+| `PORTWRIGHT_PATH` | no | Web root (default `/var/www/portwright`, the nginx docroot) |
 | `PORTWRIGHT_KNOWN_HOSTS` | recommended | Pinned `known_hosts`; else `ssh-keyscan` (TOFU) |
 
 ## Local checks

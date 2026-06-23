@@ -91,7 +91,7 @@ jobs:
           REMOTE_PATH: ${{ secrets.PORTWRIGHT_PATH }}
         run: |
           DEPLOY_USER="${DEPLOY_USER:-root}"
-          REMOTE_PATH="${REMOTE_PATH:-/var/www/portwright.io}"
+          REMOTE_PATH="${REMOTE_PATH:-/var/www/portwright}"
           rsync -avz \
             -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes" \
             public/ "${DEPLOY_USER}@${HOST}:${REMOTE_PATH}/"
