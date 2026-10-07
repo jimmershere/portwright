@@ -2,6 +2,17 @@
 
 Source + deploy pipeline for the **portwright.io** static site (private).
 
+**Site build (2026-10):** `public/` holds the new Portwright studio site — a
+TanStack Start/React SSR build authored in Grok App Builder, mirrored from the
+draft host, then adapted for self-hosting: Grok builder hooks stripped
+(extensions.js, project metas), PWA manifest rebranded, draft banners removed
+from both SSR HTML and the hydration bundle, absolute URLs rewritten to
+portwright.io, and JSX-cased attributes (charSet/crossOrigin/playsInline)
+lowercased for htmlhint. Each route ships as `route/index.html`; nginx's
+`try_files $uri $uri/ $uri.html` serves it with no config changes. The old
+static site lives in git history and in `/root/portwright-backup-*.tar.gz` on
+the droplet.
+
 ## Layout
 
 ```
